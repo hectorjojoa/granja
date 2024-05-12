@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError  } from 'rxjs/operators';
 import { GLOBAL } from './global';
 import { User } from '../models/user';
 
@@ -15,7 +15,6 @@ export class UserService {
   }
 
   
-  
   signup(user_to_login: User, gethash = null): Observable<any> {
     if (gethash == null) {
       user_to_login.gethash = gethash;
@@ -24,6 +23,10 @@ export class UserService {
     let params = json;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(this.url + 'login', params, { headers: headers })
-      .pipe(map(res => res));
+    .pipe(
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
   }
 }
