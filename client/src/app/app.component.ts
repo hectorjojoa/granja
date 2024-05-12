@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   public user: User;
   public identity: any;
   public token: any;
+  public errorMessage: any;
 
   constructor(private _userService: UserService) {
     this.user = new User('','','','','','ROL_user','');
@@ -28,17 +29,19 @@ export class AppComponent implements OnInit {
   ngOnInit() {
   }
 
-  public onSubmit() { 
+  public onSubmit() {
     console.log(this.user);
-    this._userService.signup(this.user).subscribe( 
-      response => { 
+    this._userService.signup(this.user).subscribe(
+      response => {
         console.log(response);
       },
       error => {
-        var errorMessage = <any>error;
-        if (errorMessage != null) {
-          console.log(error);
+        if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = 'Error desconocido';
         }
+        console.log(error);
       }
     );
   }
