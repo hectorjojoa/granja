@@ -1,5 +1,5 @@
 export class User{
-   gethash: null | undefined;
+   gethash?: boolean;
    constructor(
     public _id: string, 
     public name: string, 
